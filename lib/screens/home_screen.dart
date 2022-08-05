@@ -27,9 +27,10 @@ class HomeScreen extends StatelessWidget {
         ), 
       ),
       bottomNavigationBar: WaterDropNavBar(
-        backgroundColor:const Color(0xFFe8eddf),
+        backgroundColor:const Color(0xFFf8f9fa),
         inactiveIconColor:const Color(0xFF333533),
         waterDropColor:const Color(0xFF242423),
+        bottomPadding: 5,
         barItems: [
           BarItem(filledIcon: Icons.home, outlinedIcon: Icons.home_outlined),
           BarItem(filledIcon: Icons.shopping_cart, outlinedIcon: Icons.shopping_cart_outlined),

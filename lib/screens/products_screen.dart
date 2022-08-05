@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:shop_app/services/product_service.dart';
+import 'package:shop_app/models/category_model.dart';
 import 'package:shop_app/widgets/widgets.dart';
 
 class ProductScreen extends StatelessWidget {
@@ -34,7 +33,7 @@ class _ContentAllProduct extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 10, right: 10,top: 170),
+      padding: EdgeInsets.only(left: 10, right: 10,top: 190),
       width: size.width,
       height: size.height,
       color:Colors.white,
@@ -44,24 +43,66 @@ class _ContentAllProduct extends StatelessWidget {
 }
 
 class _HeaderProductScreen extends StatelessWidget {
-  const _HeaderProductScreen({
+   _HeaderProductScreen({
     Key? key,
     required this.size,
   }) : super(key: key);
 
   final Size size;
+  List category = categories;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 15, top: 20, right: 15 ),
+      padding: EdgeInsets.only(left: 15, top: 30, right: 15 ),
       width: size.width,
       height: size.height * 0.2,
-      color: Colors.white,
       child: Column(
-        children:const [
+        children: [
           _ContentProfileAndShop(),
+          Container(
+            width: size.width,
+            height: size.height * 0.1,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount:category.length,
+              itemBuilder:(context, index) {
+                final categori = category[index];
+                return ItemCategories(
+                  categorie: categori,
+                );
+              },
+              ),
+          )
+          
         ],
+      ),
+    );
+  }
+}
+
+class ItemCategories extends StatelessWidget {
+
+  final CategoryModel categorie;
+
+  const ItemCategories({Key? key, required this.categorie}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      child: Container(
+        margin: EdgeInsets.all(5),
+        width: 65,
+        height: 65,
+        decoration: BoxDecoration(
+        color: Color(0xFFf6fff8),
+          shape: BoxShape.circle
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(categorie.icon)
+          ],
+        ),
       ),
     );
   }
