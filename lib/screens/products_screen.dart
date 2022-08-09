@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shop_app/models/category_model.dart';
+import 'package:shop_app/screens/screens.dart';
+import 'package:shop_app/services/product_service.dart';
+import 'package:shop_app/services/tab_service.dart';
 import 'package:shop_app/widgets/widgets.dart';
 
 class ProductScreen extends StatelessWidget {
@@ -10,10 +14,18 @@ class ProductScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     
     final size = MediaQuery.of(context).size; 
+    final page = Provider.of<TabService>(context);
     return Scaffold(
       body: Stack(
         children: [
-          _ContentAllProduct(size: size),
+          PageView(
+            controller:page.controllerPage,
+            physics:const NeverScrollableScrollPhysics(),
+            children:[
+            _ContentAllProduct(size: size),
+             CategoryScreen()
+            ]
+          ),
           _HeaderProductScreen(size: size),
         ],
       )
@@ -42,38 +54,74 @@ class _ContentAllProduct extends StatelessWidget {
   }
 }
 
-class _HeaderProductScreen extends StatelessWidget {
-   _HeaderProductScreen({
+class _HeaderProductScreen extends StatefulWidget {
+  const _HeaderProductScreen({
     Key? key,
     required this.size,
   }) : super(key: key);
 
   final Size size;
-  List category = categories;
 
   @override
+  State<_HeaderProductScreen> createState() => _HeaderProductScreenState();
+}
+
+class _HeaderProductScreenState extends State<_HeaderProductScreen> with TickerProviderStateMixin {
+
+  List category = categories;
+
+  late TabController controller;
+
+  @override
+  void initState() {
+    
+    controller= TabController(length: 2, vsync: this);
+    super.initState();
+  }
+  
+  
+  @override
   Widget build(BuildContext context) {
-    return Container(
+    final tab = Provider.of<TabService>(context);
+    final size = MediaQuery.of(context).size;
+    return AnimatedContainer(
+      duration: Duration(seconds: 2),
       padding: EdgeInsets.only(left: 15, top: 30, right: 15 ),
-      width: size.width,
-      height: size.height * 0.2,
+      width: widget.size.width,
+      height: (!tab.isActive) ? widget.size.height * 0.16 : widget.size.height * 0.23,
+      color: Color.fromARGB(255, 218, 200, 200),
       child: Column(
         children: [
-          _ContentProfileAndShop(),
-          Container(
-            width: size.width,
-            height: size.height * 0.1,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount:category.length,
-              itemBuilder:(context, index) {
-                final categori = category[index];
-                return ItemCategories(
-                  categorie: categori,
-                );
-              },
-              ),
-          )
+          const _ContentProfileAndShop(),
+          TabBar(
+            onTap: (value) => {
+              tab.index = value,
+              (tab.index == 1) ? tab.isActive = true : tab.isActive = false
+            },
+            controller: controller,
+            labelColor: Color(0xFF10002b),
+            indicatorColor: Color(0xFF6096ba),
+            tabs:const [
+              Tab(text: 'Todos',),
+              Tab(text: 'Categorias'),
+              ]
+            ),
+            SizedBox(height: 5,),
+            AnimatedContainer(
+              alignment:Alignment.center,
+              duration:const Duration( seconds: 2 ),
+              width: (!tab.isActive) ? size.width * 0 : size.width * 0.7 ,
+              height: (!tab.isActive) ? 0 : 40,
+              color: Colors.indigo,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: category.length,
+                itemBuilder:(context, index) {
+                  final nameCategorie = category[index];
+                  return ItemCategories(categorie:nameCategorie );
+                },
+                ),
+            )
           
         ],
       ),
@@ -89,11 +137,12 @@ class ItemCategories extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      child: Container(
-        margin: EdgeInsets.all(5),
+      child: AnimatedContainer(
+        duration: Duration(seconds: 2),
+        margin: EdgeInsets.all(2),
         width: 65,
         height: 65,
-        decoration: BoxDecoration(
+        decoration:const BoxDecoration(
         color: Color(0xFFf6fff8),
           shape: BoxShape.circle
         ),

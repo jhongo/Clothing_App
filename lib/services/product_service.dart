@@ -25,6 +25,11 @@ class ProductService extends ChangeNotifier {
 
   }
 
+
+  getProductByCategory( String categorie){
+    
+  }
+
   
 }
 
