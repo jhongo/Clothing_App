@@ -89,7 +89,6 @@ class _HeaderProductScreenState extends State<_HeaderProductScreen> with TickerP
       padding: EdgeInsets.only(left: 15, top: 30, right: 15 ),
       width: widget.size.width,
       height: (!tab.isActive) ? widget.size.height * 0.16 : widget.size.height * 0.23,
-      color: Color.fromARGB(255, 218, 200, 200),
       child: Column(
         children: [
           const _ContentProfileAndShop(),
@@ -100,7 +99,9 @@ class _HeaderProductScreenState extends State<_HeaderProductScreen> with TickerP
             },
             controller: controller,
             labelColor: Color(0xFF10002b),
-            indicatorColor: Color(0xFF6096ba),
+            indicatorColor: Color(0xFFffffff),
+            unselectedLabelColor: Color(0xFF86bbd8),
+            
             tabs:const [
               Tab(text: 'Todos',),
               Tab(text: 'Categorias'),
@@ -112,7 +113,6 @@ class _HeaderProductScreenState extends State<_HeaderProductScreen> with TickerP
               duration:const Duration( seconds: 2 ),
               width: (!tab.isActive) ? size.width * 0 : size.width * 0.7 ,
               height: (!tab.isActive) ? 0 : 40,
-              color: Colors.indigo,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: category.length,
@@ -136,22 +136,22 @@ class ItemCategories extends StatelessWidget {
   const ItemCategories({Key? key, required this.categorie}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final tab = Provider.of<TabService>(context);
     return GestureDetector(
+      onTap: () {
+        tab.itemCategory = categorie.category;
+        print(tab.itemCategory);
+      },
       child: AnimatedContainer(
         duration: Duration(seconds: 2),
-        margin: EdgeInsets.all(2),
-        width: 65,
-        height: 65,
-        decoration:const BoxDecoration(
-        color: Color(0xFFf6fff8),
+        margin: EdgeInsets.all(1),
+        width: (!tab.isActive) ? 0 : 70,
+        height: (!tab.isActive) ? 0 : 70,
+        decoration: BoxDecoration(
+        color: (tab.itemCategory == categorie.category) ? Color(0xFF55828b) : Color(0xFFf2e9e4),
           shape: BoxShape.circle
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(categorie.icon)
-          ],
-        ),
+        child: Icon(categorie.icon, color: (tab.itemCategory == categorie.category) ? Color(0xFFffffff) : Color(0xFF364958) , size:(!tab.isActive) ? 0 : 22,),
       ),
     );
   }
