@@ -136,11 +136,12 @@ class ItemCategories extends StatelessWidget {
   const ItemCategories({Key? key, required this.categorie}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final category = Provider.of<ProductService>(context);
     final tab = Provider.of<TabService>(context);
     return GestureDetector(
       onTap: () {
-        tab.itemCategory = categorie.category;
-        print(tab.itemCategory);
+        category.itemCategory = categorie.category;
+        print(category.itemCategory);
       },
       child: AnimatedContainer(
         duration: Duration(seconds: 2),
@@ -148,10 +149,10 @@ class ItemCategories extends StatelessWidget {
         width: (!tab.isActive) ? 0 : 70,
         height: (!tab.isActive) ? 0 : 70,
         decoration: BoxDecoration(
-        color: (tab.itemCategory == categorie.category) ? Color(0xFF55828b) : Color(0xFFf2e9e4),
+        color: (category.itemCategory == categorie.category) ? Color(0xFF55828b) : Color(0xFFf2e9e4),
           shape: BoxShape.circle
         ),
-        child: Icon(categorie.icon, color: (tab.itemCategory == categorie.category) ? Color(0xFFffffff) : Color(0xFF364958) , size:(!tab.isActive) ? 0 : 22,),
+        child: Icon(categorie.icon, color: (category.itemCategory == categorie.category) ? Color(0xFFffffff) : Color(0xFF364958) , size:(!tab.isActive) ? 0 : 22,),
       ),
     );
   }

@@ -5,16 +5,10 @@ class TabService extends ChangeNotifier {
   PageController _pageController = PageController();
   int _indexPage = 0;
   bool _isActive = false;
-  String _itemCategory = 'electronics';
 
 
-  String get itemCategory{
-    return _itemCategory;
-  }
-  set itemCategory(String name){
-    _itemCategory = name;
-    notifyListeners();
-  }
+
+
 
 
   PageController get controllerPage{
